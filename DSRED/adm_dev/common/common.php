@@ -1,12 +1,10 @@
 <?php
-date_default_timezone_set('Asia/Seoul');
-
 // 시스템 관련 
 $sys_doc_root	= $_SERVER['DOCUMENT_ROOT'];
 $sys_doc_path	= $_SERVER['SCRIPT_FILENAME'];
 
 // 사이트 관련
-$site_isDebug	= false;
+$site_isDebug	= true;
 $site_isLogin	= ($_COOKIE['isLogin'] == "") ? false : $_COOKIE['isLogin'];
 $site_UID		= ($_COOKIE['usr_num'] == "") ? "" : $_COOKIE['usr_num'];
 $site_UMAIL		= ($_COOKIE['user_mail'] == "") ? false : $_COOKIE['user_mail'];
@@ -47,7 +45,7 @@ $page_Data	["statistics9"]	= array("s", true, 914, "04.mad_9.statistics.php"	, "
 $page_url		= $_SERVER['REQUEST_URI'];
 $page_file		= $_SERVER['SCRIPT_NAME'];
 $page_reffer	= $_SERVER['HTTP_REFERER'];
-$page_id		= ($_GET['q'] == "") ? "main" : $_GET['q'];
+$page_id		= ($_GET['action'] == "") ? "main" : $_GET['action'];
 $page_type		= $page_Data[$page_id	][0];
 $page_auth		= $page_Data[$page_id	][1];
 $page_marker	= $page_Data[$page_id	][2];
@@ -60,46 +58,5 @@ $t_domain_id	= ($_GET['d'] == "") ? "" : $_GET['d'];
 //echo("<br/>$site_root$site_index");
 //echo("<br/>$site_root$site_resource");
 
-/** Page Style **/
-function PS_PageLink($pageID = "") {
-	global $site_root, $site_index;
-	if ($pageID == "")
-		echo ("href='$site_root/$site_index'");
-	else
-		echo ("href='javascript:fn_PageLink(\"$pageID\");'");
-}
-function PS_Style($styleFile = "", $isStatic = true) {
-	global $site_root,$site_resource,$site_isDebug;
-	$timestemp = $site_isDebug ? date('YmdHis') : date('Ymd');
 
-	if ($isStatic) 
-		echo ("<link href='$site_root$site_resource/css/$styleFile' rel='stylesheet' />\n");
-	else 
-		echo ("<link href='$site_root$site_resource/css/$styleFile?$timestemp' rel='stylesheet' />\n");
-}
-function PS_Script($scriptFile = "", $scriptID = "", $isStatic = true) {
-	global $site_root,$site_resource,$site_isDebug;
-	$timestemp = $site_isDebug ? date('YmdHi') : date('Ymd');
-
-	if ($isStatic) 
-		echo ("<script src='$site_root$site_resource/js/$scriptFile' id='$scriptID'></script>\n");
-	else 
-		echo ("<script src='$site_root$site_resource/js/$scriptFile?$timestemp' id='$scriptID'></script>\n");
-}
-function PS_Image($imageFile = "", $imageAlt = "") {
-	global $site_root,$site_resource;
-	echo ("<img src='$site_root$site_resource/images/$imageFile' alt='$imageAlt' />");
-}
-function PS_Icon($imageFile = "", $imageAlt = "") {
-	global $site_root,$site_resource;
-	echo ("<img src='$site_root$site_resource/icons/$imageFile' alt='$imageAlt' />");
-}
-
-/** Common Function **/
-function startWith($haystack, $needle) {
-    return $needle === "" || strpos($haystack, $needle) === 0;
-}
-function endWith($haystack, $needle) {
-    return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
-}
 ?>
