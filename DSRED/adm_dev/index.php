@@ -1,3 +1,17 @@
+<?php
+//
+//	Project Title	: Daesung Groupware
+//	Developer		: dragonslam@gmail.com
+//	Create date		: 2015-03-10
+//	Description		: Init Page.
+//
+//	Edit history
+// 
+// ========================================================
+//	Date     Editer     Description
+// ------------------------------------------------------------------------
+//'
+?>
 <?php 
 	// Ensure we're on php 5.3 or newer
 	if (strnatcmp(phpversion(), '5.3') < 0) {
@@ -19,11 +33,14 @@
 	// common variable setting.. 
 	@include "common/common.php";
 	
+	// login check...
+	@include "common/authentication.php";
+	
 	// view load..
-	@include "view/00.view.main.php";
+	@include "views/page.template.php";
 	
 	// 디버깅 정보 출력
-	if ($site_isDebug) {
+	if ($site_isDebug && $site_isLogin) {
 		@include "common/debug.php";
 	}
 ?>

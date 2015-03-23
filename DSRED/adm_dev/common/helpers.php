@@ -29,6 +29,22 @@ function get_var($name)
 }
 
 /**
+ * search global request variables $_POST in that order and return
+ * the first defined value for the given key
+ *
+ * @param string $name
+ * @return mixed    the value of the variable name (if any) or null.
+ */
+function get_post($name) {
+	if ($_POST[$name] == "") {
+		return "";
+	}
+	else {
+		return str_replace("'", "''", $_POST[$name]);
+	}
+}
+
+/**
  * return the full URL for the base page of the site.
  *
  * @return string
@@ -154,23 +170,23 @@ function PS_PageLink($pageID = "") {
 	else
 		echo ("href='javascript:fn_PageLink(\"$pageID\");'");
 }
-function PS_Style($styleFile = "", $isStatic = true) {
+function PS_Style($styleFile = "", $isStatic = true, $class = "") {
 	global $site_root,$site_resource,$site_isDebug;
 	$timestemp = $site_isDebug ? date('YmdHis') : date('Ymd');
 
 	if ($isStatic)
-		echo ("<link href='$site_root$site_resource/css/$styleFile' rel='stylesheet' />\n");
+		echo ("<link href='$site_root$site_resource$styleFile' rel='stylesheet' class='$class'/>\n");
 	else
-		echo ("<link href='$site_root$site_resource/css/$styleFile?$timestemp' rel='stylesheet' />\n");
+		echo ("<link href='$site_root$site_resource$styleFile?$timestemp' rel='stylesheet' class='$class'/>\n");
 }
 function PS_Script($scriptFile = "", $scriptID = "", $isStatic = true) {
 	global $site_root,$site_resource,$site_isDebug;
 	$timestemp = $site_isDebug ? date('YmdHi') : date('Ymd');
 
 	if ($isStatic)
-		echo ("<script src='$site_root$site_resource/js/$scriptFile' id='$scriptID'></script>\n");
+		echo ("<script src='$site_root$site_resource$scriptFile' id='$scriptID'></script>\n");
 	else
-		echo ("<script src='$site_root$site_resource/js/$scriptFile?$timestemp' id='$scriptID'></script>\n");
+		echo ("<script src='$site_root$site_resource$scriptFile?$timestemp' id='$scriptID'></script>\n");
 }
 function PS_Image($imageFile = "", $imageAlt = "") {
 	global $site_root,$site_resource;

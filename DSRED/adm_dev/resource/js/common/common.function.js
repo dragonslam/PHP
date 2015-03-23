@@ -1,4 +1,4 @@
-/* common.function.js - MAD common script
+/* common.function.js - common script
  	writ by yi seung-yong(dragonslam@nate.com)
  	date, 2014/09/23
 */

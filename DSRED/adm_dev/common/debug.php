@@ -1,5 +1,6 @@
 <style type="text/css">
 /* debug , by deagonslam */
+#pageDebug {background-color:#fff;}
 #pageDebug table {border:1px solid #000;width:100%;border-spacing:2px;}
 #pageDebug table .title {text-decoration:bold;color:#0000ff;font-size:11pt;padding:5px;}
 #pageDebug table {border:1px solid #000;width:100%;border-spacing:0px;}
@@ -33,7 +34,7 @@ function _printSessionVar() {
 	_printDebub("HTTP Session Variables", $_SESSION);
 }
 
-echo("<div id='pageDebug'>");
+echo("<div id='pageDebug'><br/>");
 echo date('Y/m/d H:i:s');
 _printServerVar();
 _printSessionVar();

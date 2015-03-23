@@ -32,7 +32,7 @@ function fn_MemberPop(){
 		$("#pop_signin").find("input[name='login_email']").focus();
 	});
 	$(".btn_logout").click(function() {
-		var m = new com.mad.api.member();
+		var m = new com.ds.api.member();
 		m.logout(function() {
 			fn_CallMessage("SYS_LOGOUT_COMPLATE");
 			fn_PageLink('');
@@ -58,7 +58,7 @@ function fn_MemberPop(){
 	if (typeof ($("#pop_signin")[0]) == 'object') 
 	{
 		$("#pop_signin").find("a[href='#login']").click(function(e) {
-			var m = new com.mad.api.member();
+			var m = new com.ds.api.member();
 			m.login(
 				  $("#pop_signin").find("input[name='login_email']")
 				, $("#pop_signin").find("input[name='login_pwd']")
@@ -105,7 +105,7 @@ function fn_MemberPop(){
 	if (typeof ($("#pop_register")[0]) == 'object') 
 	{
 		$("#pop_register").find("a[href='#register']").click(function() {
-			var m = new com.mad.api.member();
+			var m = new com.ds.api.member();
 			m.register(
 				  $("#pop_register").find("input[name='regist_email']")
 				, $("#pop_register").find("input[name='regist_pw1']")
@@ -130,7 +130,7 @@ function fn_MemberPop(){
 	if (typeof ($("#pop_changepw")[0]) == 'object') 
 	{
 		$("#pop_changepw").find("a[href='#changepw']").bind('click', function() {
-			var m = new com.mad.api.member();
+			var m = new com.ds.api.member();
 			m.change_password(
 				  $("#pop_changepw").find("input[name='pw_origin']")
 				, $("#pop_changepw").find("input[name='pw_new1']")
@@ -149,7 +149,7 @@ function fn_MemberPop(){
 	if (typeof ($("#pop_missingpw")[0]) == 'object') 
 	{
 		$("#pop_missingpw").find("a[href='#missingpw']").click(function() {
-			var m = new com.mad.api.member();
+			var m = new com.ds.api.member();
 			m.missing_password(
 				  $("#pop_missingpw").find("input[name='missing_email']")
 				, function() {
@@ -190,12 +190,12 @@ function fn_PageLink(q) {
 		document.location.replace(L.protocol +"//" + L.host + L.pathname +"?q="+Q+"&t="+ _DomainType +"&d="+ _DomainID);
 }
 function fn_CallMessage(id, tp) {
-	if (window.$Message instanceof com.mad.message.hendler) {		
+	if (window.$Message instanceof com.ds.message.hendler) {		
 		return window.$Message.call((String(id).isEmpty() ? '' : id), (String(tp).isEmpty() ? '' : tp));
 	}
 }
 function fn_GetMessage(id, tp) {
-	if (window.$Message instanceof com.mad.message.hendler) {		
+	if (window.$Message instanceof com.ds.message.hendler) {		
 		return window.$Message.get((String(id).isEmpty() ? '' : id), (String(tp).isEmpty() ? '' : tp));
 	}
 	return '';
@@ -220,65 +220,9 @@ function fn_CopyText(o) {
 }
 
 $(document).ready(function(){
-	fn_LoginViewHandler();		
-	fn_MemberPop();	
-	fn_SelectLabel();	
+	
+	
 
-	var oTrackingwrap	= $(".hs2_tracking").find(".select_wrap");
-	var oTrackingLable	= $(".hs2_tracking").find(".select_label");
-	var oTrackingSelect	= $(".hs2_tracking").find("select");
 
-	if (typeof (oTrackingSelect[0]) == 'object') 
-	{
-		var oTracking = new com.mad.api.tracking(oTrackingSelect);
-		
-		window._DomainObj		= oTrackingSelect;
-		window._DomainID		= (String(_DomainID).isEmpty() ? _DomainObj.val() : _DomainID);
-		window._DomainType	= (String(_DomainType).isEmpty() ? 's' : _DomainType);
-		window._DomainObj.change(function() {
-			_DomainID = $(this).val();
-			
-			// 현재 페이지 재 호출
-			fn_PageLink();
-			/*
-			// Tracking ID를 변경하면은 페이지를 갱신한다.
-			if (typeof _DomainCaller == 'function') {
-				_DomainCaller(_DomainID);
-			}
-			*/
-		});
-
-		$(".hs2_tracking").find(".blt_1").click(function() {
-			oTracking.bindSocialTracking(function() { 
-				if (window._DomainType === 's') {
-					window._DomainObj.val(window._DomainID);
-				}
-				oTrackingLable.html(oTrackingSelect.find("option:selected").text());
-				oTrackingwrap.removeClass("social").removeClass("event").addClass("social");
-
-				window._DomainType= "s";
-				window._DomainID	= window._DomainObj.val();
-			});
-		}).css('cursor', 'pointer');
-
-		$(".hs2_tracking").find(".blt_2").click(function() {
-			oTracking.bindEventTracking(function() { 
-				if (window._DomainType === 'e') {
-					window._DomainObj.val(window._DomainID);
-				}
-
-				oTrackingLable.html(oTrackingSelect.find("option:selected").text());
-				oTrackingwrap.removeClass("social").removeClass("event").addClass("event");
-
-				window._DomainType= "e";
-				window._DomainID	= window._DomainObj.val();
-			});
-		}).css('cursor', 'pointer');
-
-		if (window._DomainType === 's') {
-			$(".hs2_tracking").find(".blt_1").click(); return;
-		} else {
-			$(".hs2_tracking").find(".blt_2").click(); return;
-		}
-	}
+	
 });
