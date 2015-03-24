@@ -48,12 +48,10 @@ if ($processApp == "member") {
 	elseif ($processCmd == "logout") {
 		$processStatus	= 1;
 						
-		// remove all session variables
-		echo("<br/>remove all session variables");		
+		// remove all session variables				
 		session_unset();
 		
-		// destroy the session
-		echo("<br/>destroy the session");
+		// destroy the sessiona		
 		session_destroy();
 		
 		//~ Logging.. 

@@ -48,7 +48,7 @@ $page_Data["System"]	= array("m", true, "System/_template.php", "시스템관리
 $page_url		= $_SERVER['REQUEST_URI'];
 $page_file		= $_SERVER['SCRIPT_NAME'];
 $page_reffer	= $_SERVER['HTTP_REFERER'];
-$page_id		= ($_GET['view'] == "") ? "login" : $_GET['view'];
+$page_id		= ($_GET['view'] == "") ? "Main" : $_GET['view'];
 $page_action	= ($_GET['action'] == "") ? "" : $_GET['action'];
 $page_type		= $page_Data[$page_id][0];
 $page_auth		= $page_Data[$page_id][1];
