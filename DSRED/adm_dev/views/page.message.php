@@ -1,68 +1,63 @@
-	<div class ="wrap main">
-		<header class="main">
-			<section class="hs1">
-				<h1><a <?php PS_PageLink(); ?>><?php PS_Image("txt_logo_1.png", "MAD")?></a></h1>
-				<nav class="gnb">
-					<ul>
-						<li><a <?php PS_PageLink("info"); ?>>MAD?</a></li>
-						<li><a <?php PS_PageLink("faq"); ?>>FAQ</a></li>
-					</ul>
-				</nav>
-			</section>
-			<section class="hs2">
-				<p class="para_hs1"><span id="mad_login_msg">매드 고객님을 환영합니다.</span></p>
-				<nav class="tnb">
-					<ul>
-						<li>
-							<a href="#" class="btn_signin"><?php PS_Image("btn_signin.png", "SIGN IN")?></a>
-							<a href="#" class="btn_logout" style='display:none;'><?php PS_Image("btn_logout.png", "LOGOUT")?></a>
-						</li>
-						<li>
-							<a href="#" class="btn_register"><?php PS_Image("btn_register.png", "REGISTER")?></a>
-							<a href="#" class="btn_changepw"  style='display:none;'><?php PS_Image("btn_changepw.png", "CHANGE PW")?></a>
-						</li>
-					</ul>
-				</nav>
-			</section>
-		</header>
-
-		<div class="contents main" id="contents">
-			<div style="height:500px;">
-				<div style="width:300px;height:300px;border:1px solid #3333;" align="center">
-					<?php echo($site_message); ?>
-				</div>
-			</div>
-			<script type="text/javascript">
-			<!--
-				$(document).ready(function(){
-					alert("<?php echo($site_message); ?>");
-					fn_PageLink("main");
-				});
-			//-->
-			</script>
-		</div>
-
-		<footer class="main">
-			<div class="fl">
-				<nav class="fnb">
-					<ul>
-						<li><a href="http://uglyoz6.wix.com/m2block" target="_blank">Company</a></li>
-						<li><a href="#facebook" target="_blank"><?php PS_Image("blt_facebook.png", "")?> Facebook</a></li>
-						<li><a <?php PS_PageLink("terms1"); ?>>이용약관</a></li>
-						<li><a <?php PS_PageLink("terms2"); ?>>개인정보 취급방침</a></li>
-					</ul>
-				</nav>
-			</div>
-			<div class="fr">
-				<section class="fs1">
-					<p><?php PS_Image("txt_logo_2.png", "M2Block")?></p>
-				</section>
-				<section class="fs2">
-					<p>사업자등록번호 : 113-23-30599</p>
-					<p>경기도 성남시 분당구 삼평동 629 대왕판교로 645번길 12 8층 R14 (판교 공공지원센터 경기문화창조 허브)</p>
-					<p>Contact Us : macro0630@gmail.com</p>
-					<p>Copyright (c) 2014 www.m2block.com All Rights Reserved.</p>
-				</section>
-			</div>
-		</footer>
+<?php
+//
+//	Project Title	: Daesung Groupware
+//	Developer		: dragonslam@gmail.com
+//	Create date		: 2015-03-10
+//	Description		: Message Page
+//
+//	Edit history
+// 
+// ========================================================
+//	Date     Editer     Description
+// ------------------------------------------------------------------------
+//'
+?>
+<?php
+	PS_Style("/bootstrap/css/unicorn.login.css");	
+?>	
+	<div style="padding-top:150px;"></div>
+	<div id="logo">
+		<h1><span style="color:#ffffff;">Message</span></h1>
 	</div>
+	<div id="loginbox">            
+			<div style="height:95px;padding:20px;">
+				<b><?php echo $processMessage?></b>
+			</div>
+			
+			<div class="form-actions" style="padding-top:3px;padding-right:10px;">
+				<!--span class="pull-left"><a href="#" class="flip-link" id="to-recover">Lost password?</a></span -->
+				<span class="pull-right"><input type="button" id="btn_goto" class="btn btn-inverse" value="Goto" /></span>					
+			</div>
+	</div>
+	<div style="padding-top:100px;"></div>
+	<script type="text/javascript">
+	<!--
+		var gotoUrl	= "<?php echo $processGotoUrl?>";
+		var callBack= "<?php echo $processCallback?>";
+		$(document).ready(function(){			
+			window.setTimeout(function() {
+				if (callBack != "") {
+					eval(callBack);
+				} 
+				else {
+					location.href = gotoUrl;
+				}
+			}, 3000);			
+
+			$("#btn_goto").click(function() {
+				if (callBack != "") {
+					eval(callBack);
+				} 
+				else {
+					location.href = gotoUrl;
+				}
+			});
+		});
+	//-->
+	</script>
+<form class="form-horizontal" name="mainForm" id="mainForm" method="post">
+<input type="hidden" name="processApp" id="processApp" value="<?php echo $processApp?>" />
+<input type="hidden" name="processCmd" id="processCmd" value="<?php echo $processCmd?>" />
+<input type="hidden" name="processSeq" id="processSeq" value="<?php echo $processSeq?>" />
+<input type="hidden" name="processCallback" id="processCallback" value="<?php echo $processCallback?>" />
+</form>

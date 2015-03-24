@@ -33,14 +33,23 @@
 	// common variable setting.. 
 	@include "common/common.php";
 	
-	// login check...
-	@include "common/authentication.php";
+	// data processing..	
+	if ($processApp != "" && $processCmd != "") {
+		
+		// login check...
+		@include "common/dac/login.inc";
+		
+		if ($processStatus == 0) 
+		{	// Data Access Compoment Importing.
+			@include "common/dac/".$processApp.".inc";
+		}
+	}
 	
 	// view load..
 	@include "views/page.template.php";
 	
 	// 디버깅 정보 출력
-	if ($site_isDebug && $site_isLogin) {
+	if ($site_isDebug) {
 		@include "common/debug.php";
 	}
 ?>

@@ -110,8 +110,7 @@ else {
 		
 ?>
 <script type="text/javascript">
-<!--
-	var isLogin_page	= ("<?php echo($page_auth)?>" === "true") ? true : false;
+<!--	
 	var resource_root	= "<?php echo("$site_root$site_resource")?>";
 	var resource_max	= "<?php echo("$site_excel_max_cnt")?>";
 	var _DomainType		= "<?php echo("$t_domain_type"); ?>";

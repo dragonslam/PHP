@@ -69,7 +69,7 @@ $(document).ready(function(){
 function fnCommander(app, cmd, identity, callback, isDelete, target, action) {
 	app			= typeof(app) == "string" ? app : "";
 	cmd			= typeof(cmd) == "string" ? cmd : "";
-	callback		= typeof(callback) == "string" ? callback : "";
+	callback	= typeof(callback) == "string" ? callback : "";
 	action		= typeof(action) == "string" ? action : "";
 	identity		= identity ? identity : "0";	
 	if (cmd == "")	
@@ -198,7 +198,7 @@ function fnModalOpen(title, message) {
 }
 
 function fnStyleSwitcher(style) {
-	$('.skin-color').attr('href','resources/bootstrap/css/unicorn.'+style+'.css');
+	$('.skin-color').attr('href',resource_root+'/bootstrap/css/unicorn.'+style+'.css');
 	$(this).siblings('a').css({'border-color':'transparent'});
 	$(this).css({'border-color':'#aaaaaa'});
 }

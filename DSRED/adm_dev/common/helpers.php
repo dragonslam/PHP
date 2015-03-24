@@ -175,9 +175,9 @@ function PS_Style($styleFile = "", $isStatic = true, $class = "") {
 	$timestemp = $site_isDebug ? date('YmdHis') : date('Ymd');
 
 	if ($isStatic)
-		echo ("<link href='$site_root$site_resource$styleFile' rel='stylesheet' class='$class'/>\n");
+		echo ("<link href='$site_root$site_resource$styleFile' rel='stylesheet'".($class == "" ? "" : " class='$class'")."/>\n");
 	else
-		echo ("<link href='$site_root$site_resource$styleFile?$timestemp' rel='stylesheet' class='$class'/>\n");
+		echo ("<link href='$site_root$site_resource$styleFile?$timestemp' rel='stylesheet'".($class == "" ? "" : " class='$class'")."/>\n");
 }
 function PS_Script($scriptFile = "", $scriptID = "", $isStatic = true) {
 	global $site_root,$site_resource,$site_isDebug;
@@ -196,7 +196,20 @@ function PS_Icon($imageFile = "", $imageAlt = "") {
 	global $site_root,$site_resource;
 	echo ("<img src='$site_root$site_resource/icons/$imageFile' alt='$imageAlt' />");
 }
-
+function PS_AddScript($script) {
+	global $processScript;
+	$processScript = $processScript."\n".$script;
+}
+function PS_RemoveScript() {
+	global $processScript;
+	$processScript = "";
+}
+function PS_PrintScript() {
+	global $processScript;
+	if ($processScript != "") {
+		echo("<script type='text/javascript'>".$processScript."\n</script>");
+	}
+}
 
 /** Common Function **/
 function startWith($haystack, $needle) {

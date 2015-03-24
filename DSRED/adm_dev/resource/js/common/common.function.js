@@ -496,3 +496,59 @@ var Cache = function(type, span/* integer */, format/* s, m, h, d, M, y, w */) {
 		}
     };
 };
+
+
+
+function fnCallAjax(params, callback) {
+	$.ajax({
+		  type: 'post'
+		, async: true
+		, url: './index.php'
+		, data: params
+		, beforeSend: function() {
+			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+		}
+		, success: function(data) {
+			var response = data.trim();
+			$debug("success forward : "+ response);
+
+			if (typeof callback == "function") {
+				callback(response);
+			}
+		}
+		, error: function(data, status, err) {
+			$debug("success forward : "+data);			
+			alert('서버와의 통신이 실패했습니다.');
+		}
+		, complete: function() { 
+			//$('#ajax_load_indicator').fadeOut();
+		}
+	});
+}
+function fnCallXML(params, callback) {
+	$.ajax({
+		  type: 'post'
+		, async: false
+		, url: './index.php'
+		, data: params
+		, dataType: "xml"
+		, beforeSend: function() {
+			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+		}
+		, success: function(data) {
+			var response = data;
+			$debug("success forward : "+ response);
+
+			if (typeof callback == "function") {
+				callback(response);
+			}
+		}
+		, error: function(data, status, err) {
+			$debug("success forward : "+data);			
+			alert('서버와의 통신이 실패했습니다.');
+		}
+		, complete: function() { 
+			//$('#ajax_load_indicator').fadeOut();
+		}
+	});
+}

@@ -1,3 +1,29 @@
+<?php
+//
+//	Project Title	: Daesung Groupware
+//	Developer		: dragonslam@gmail.com
+//	Create date		: 2015-03-10
+//	Description		: Admin Main Template
+//
+//	Edit history
+// 
+// ========================================================
+//	Date     Editer     Description
+// ------------------------------------------------------------------------
+//'
+?>
+<?php
+// Template Common
+function _template_print_Contents_Header() {
+	global $page_id, $page_title;
+
+	echo("<div id='content-header'><h1>".$page_title."</h1></div>");
+	echo("<div id='breadcrumb'>");
+	echo("<a href='#' title='Go to Home' class='tip-bottom'><i class='icon-home'></i> Home</a>");
+	echo("<a href='#' class='tip-bottom'> ".$page_id."</a>");
+	echo("<a href='#' class='current'> ".$page_title."</a></div>");
+} 
+?>
 		<div id="header">
 			<h1><a href="./?admin">DAESEUNG MANAGER</a></h1>
 		</div>
@@ -21,9 +47,9 @@
 			<a href="#red" style="background-color: #673232;"></a>
             <a href="#red-green" style="background-image: url('<?php echo $site_res_path; ?>/bootstrap/img/demo/red-green.png');background-repeat: no-repeat;"></a>
 		</div>
-
-		<!--#include file="admin.menu.asp"-->
-
+		<?php
+			@include 'main.menu.php'; 
+		?>
 		<div id="content">
 			<form class="form-horizontal" name="mainForm" id="mainForm" method="post" onsubmit="return false;">
 				<input type="hidden" name="processApp" id="processApp" value="<?php echo $processApp; ?>" />
@@ -31,10 +57,14 @@
 				<input type="hidden" name="processSeq" id="processSeq" value="<?php echo $processSeq; ?>" />
 				<input type="hidden" name="processCallback" id="processCallback" value="<?php echo $processCallback; ?>" />
 
-<?php 
-	// 각 업무별 템플릿 로딩.
-?>
-				
-			</form>
-		
+			<?php
+				if ($page_id == "Main") {					
+					@include "Main/main.dashboard.php";
+				}
+				else {
+					// 각 업무별 템플릿 로딩.
+					@include $page_Data[$page_id][2];
+				}
+			?>				
+			</form>		
 		</div>

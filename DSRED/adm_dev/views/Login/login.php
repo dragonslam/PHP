@@ -16,9 +16,9 @@
 	PS_Style("/bootstrap/css/unicorn.login.css");
 	PS_Script("/bootstrap/js/unicorn.login.ds.js", "login", true);
 ?>
-<div style="padding-top:100px;padding-bottom:200px;">
+	<div style="padding-top:150px;"></div>
 	<div id="logo">
-		<h1><span style="color:#ffffff;">DS Login</span></h1>
+		<h1><span style="color:#ffffff;">Login</span></h1>
 	</div>
 	<div id="loginbox">            
 		<form id="loginform" class="form-vertical">
@@ -45,4 +45,4 @@
 			</div>
 		</form>
 	</div>
-</div>
+	<div style="padding-top:100px;"></div>
