@@ -89,6 +89,92 @@ function fnCommander(app, cmd, identity, callback, isDelete, target, action) {
 	oForm.submit();
 }
 
+
+function fnCallAjax(params, callback) {
+	$.ajax({
+		  type: 'post'
+		, async: true
+		, url: './index.php'
+		, data: params
+		, beforeSend: function() {
+			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+		}
+		, success: function(data) {
+			var response = data.trim();
+			$debug("success forward : "+ response);
+
+			if (typeof callback == "function") {
+				callback(response);
+			}
+		}
+		, error: function(data, status, err) {
+			$debug("success forward : "+data);			
+			alert('서버와의 통신이 실패했습니다.');
+		}
+		, complete: function() { 
+			//$('#ajax_load_indicator').fadeOut();
+		}
+	});
+}
+function fnCallXML(params, callback) {
+	$.ajax({
+		  type: 'post'
+		, async: false
+		, url: './index.php'
+		, data: params
+		, dataType: "xml"
+		, beforeSend: function() {
+			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+		}
+		, success: function(data) {
+			var response = data;
+			$debug("success forward : "+ response);
+
+			if (typeof callback == "function") {
+				callback(response);
+			}
+		}
+		, error: function(data, status, err) {
+			$debug("success forward : "+data);			
+			alert('서버와의 통신이 실패했습니다.');
+		}
+		, complete: function() { 
+			//$('#ajax_load_indicator').fadeOut();
+		}
+	});
+}
+function fnRanderDataTable_Contents(dataTable, pAppl,  pCmd, pSeq, RowRander, callback) {
+	if (typeof document.getElementById(dataTable) != "object") {
+		fnModalOpen("Contents Management", "목록을 출력할 수 없습니다.");
+		return false;
+	}
+
+	fnCallAjax({
+			 "processApp":pAppl
+			,"processCmd":pCmd
+			,"processSeq":pSeq
+		}, 
+		function(data) {
+			if (data != "") {
+				var oData = $.parseJSON(data);
+				if (oData == null && oData.length > 0) return;
+
+				$(oData).each(function(e) {						
+					$("#"+dataTable+" tbody").append(RowRander(oData[e]));							
+				});
+			} 
+			else {
+				fnModalOpen("Contents Management", "검색된 정보가 없습니다.");
+			}
+
+			if (typeof callback == "function"){
+				callback(data);
+			}
+		}
+	);
+}
+
+
 var _Cartgory_Root		= "-1";
 function fnGetCartgory(pid, callback) {
 	fnCallAjax({
@@ -230,3 +316,5 @@ function fnViewDataRefine(data) {
 		}
 	}			
 }
+
+

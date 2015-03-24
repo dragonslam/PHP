@@ -1,7 +1,7 @@
 			
 <script type="text/javascript">
 	$(document).ready(function(){
-		fnRanderDataTable_Contents("dataTable_LoginLog", "getLoginLog", function() {
+		fnRanderDataTable_Contents("dataTable_LoginLog", "member", "getLoginLog", "-1", fnRanderDataLogRow, function() {
 			$("#dataTable_LoginLog").dataTable({
 				"bJQueryUI": true,
 				"bPaginate": true,
@@ -17,40 +17,6 @@
 			});
 		});
 	});
-
-	function fnRanderDataTable_Contents(dataTable, pCmd, callback) {
-		if (typeof document.getElementById(dataTable) != "object") {
-			fnModalOpen("Contents Management", "목록을 출력할 수 없습니다.");
-			return false;
-		}
-
-		fnCallAjax({
-				 "processApp":"manager"
-				,"processCmd":pCmd
-				,"processSeq":"-1"
-			}, 
-			function(data) {
-				if (data != "") {
-					var oData = $.parseJSON(data);
-					if (oData == null && oData.length > 0) return;
-
-					$(oData).each(function(e) {
-						if (pCmd == "getLoginLog")
-							$("#"+dataTable+" tbody").append(fnRanderDataLogRow(oData[e]));						
-						else 
-							$("#"+dataTable+" tbody").append(fnRanderDataRow(oData[e]));						
-					});
-				} 
-				else {
-					fnModalOpen("Contents Management", "검색된 정보가 없습니다.");
-				}
-
-				if (typeof callback == "function"){
-					callback(data);
-				}
-			}
-		);
-	}
 
 	function fnRanderDataLogRow(oRowData) {
 		if (typeof oRowData != "object") return "";
