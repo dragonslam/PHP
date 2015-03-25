@@ -5,11 +5,7 @@
 		
 		<?php
 		$processApp = ($processApp == "") ? "member" : $processApp;
-		$processCmd = ($processCmd == "") ? "list" : $processCmd;
-				
-		@include "/common/process/member.inc";		
-		
-		echo "<br/>Member Process - ". $processApp ."/". $processCmd ."/". empty($memberDao);
+		$processCmd = ($processCmd == "") ? "list" : $processCmd;				
 		
 		@include $processApp.".".$processCmd.".php";				
 		?>

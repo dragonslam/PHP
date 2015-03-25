@@ -17,6 +17,12 @@
 
 if ($processApp == "process_login") {
 	
+	require "LoginLogDao.inc";
+	require "MemberDao.inc";
+	
+	$loginDao = new LoginLogDao($site_datasource);
+	$memberDao = new MemberDao($site_datasource);			
+	
 	if ($processCmd == "login") {
 		
 		$processStatus	= 1;
@@ -28,12 +34,12 @@ if ($processApp == "process_login") {
 			
 			//~ Check member
 			
-			$_SESSION['isLogin']	= true;
-			$_SESSION['usr_id']		= $Login_User_ID;
-			$_SESSION['usr_name']	= "이승용";
-			$_SESSION['user_mail']	= "dragonslam@gmail.com";
+			$_SESSION['isLogin']			= true;
+			$_SESSION['usr_id']			= $Login_User_ID;
+			$_SESSION['usr_name']		= "이승용";
+			$_SESSION['user_mail']		= "dragonslam@gmail.com";
 			$_SESSION['user_group']	= 1;
-			$_SESSION['user_type']	= 1;	// 0: guest, 1: member, 2: admin
+			$_SESSION['user_type']		= 1;	// 0: guest, 1: member, 2: admin
 			
 			//~ Logging..  
 			

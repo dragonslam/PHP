@@ -20,6 +20,8 @@
 	}
 	
 	set_include_path( get_include_path() . PATH_SEPARATOR . "./common");	
+	set_include_path( get_include_path() . PATH_SEPARATOR . "./common/dao");
+	set_include_path( get_include_path() . PATH_SEPARATOR . "./common/process");
 	
 	require "helpers.php";
 	require "dao_base.php";
@@ -38,11 +40,16 @@
 		$_SESSION['isNewUser'] = false;
 	}
 	
+	echo "<br/>".$site_datasource["host"];
+	echo "<br/>".$site_datasource["user"];
+	echo "<br/>".$site_datasource["password"];
+	$con = mysql_connect($site_datasource["host"].":".$site_datasource["port"], $site_datasource["user"], $site_datasource["password"]);	
+	
 	// data processing..	process
 	if ($processIsRun == true) {
 		
 		// login check...
-		@include "common/process/login.inc";
+		//@include "common/process/login.inc";
 		
 		if ($processStatus == 0) 
 		{	// Data Access Compoment Importing.
