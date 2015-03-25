@@ -30,7 +30,6 @@
 		print "need configration.";
 		die();
 	}
-	error_reporting(E_ALL);
 	
 	// common variable setting.. 
 	@include "common/common.php";
@@ -40,14 +39,14 @@
 	}
 	
 	// data processing..	process
-	if ($processApp != "" && $processCmd != "" && startWith($processApp, "process")) {
+	if ($processIsRun == true) {
 		
 		// login check...
 		@include "common/process/login.inc";
 		
 		if ($processStatus == 0) 
 		{	// Data Access Compoment Importing.
-			@include "common/process/".$processApp.".inc";
+			@include "common/process/".str_replace("process_", "", $processApp).".inc";
 		}
 	}
 	
@@ -56,6 +55,7 @@
 	
 	// 디버깅 정보 출력
 	if ($site_isDebug) {
+		error_reporting(E_ALL | E_STRICT);		
 		@include "common/debug.php";
-	}
+	}	
 ?>

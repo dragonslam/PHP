@@ -1,3 +1,33 @@
+<div class="widget-box">
+	<div class="widget-title">		
+		<span class="icon"><i class="icon-th-list"></i></span><h5>Manager List</h5>
+	</div>
+
+	<div class="widget-content nopadding">
+		<table id="dataTable_Manager" class="table table-bordered table-striped table-hover data-table">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>관리자 ID</th>
+					<th>이름</th>
+					<th>타입</th>
+					<th>권한</th>
+					<th>횟수</th>
+					<th>마지막로그인</th>
+					<th>작성자</th>
+					<th>작성일</th>	
+					<th>수정자</th>
+					<th>수정일</th>	
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>  
+	</div>
+	<div class="buttons">										
+		<button id="btn_Insert" value="Insert" class="btn btn-primary"><i class="icon-edit icon-white"></i> 등록</button>
+	</div>
+</div>
 <script type="text/javascript">
 	$(document).ready(function(){
 		fnRanderDataTable_Contents("dataTable_Manager", "member", "getList", "-1", fnRanderDataRow, function() {
@@ -40,35 +70,4 @@
 	function fnGotoForm(memberSeq) {
 		fnCommander("member", "form", memberSeq, "", false, "", _Query.getQuery());
 	}
-</script>
-
-						<div class="widget-box">
-							<div class="widget-title">		
-								<span class="icon"><i class="icon-th-list"></i></span><h5>Manager List</h5>
-							</div>
-
-							<div class="widget-content nopadding">
-								<table id="dataTable_Manager" class="table table-bordered table-striped table-hover data-table">
-									<thead>
-										<tr>
-											<th>No</th>
-											<th>관리자 ID</th>
-											<th>이름</th>
-											<th>타입</th>
-											<th>권한</th>
-											<th>횟수</th>
-											<th>마지막로그인</th>
-											<th>작성자</th>
-											<th>작성일</th>	
-											<th>수정자</th>
-											<th>수정일</th>	
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>  
-							</div>
-							<div class="buttons">										
-								<button id="btn_Insert" value="Insert" class="btn btn-primary"><i class="icon-edit icon-white"></i> 등록</button>
-							</div>
-						</div>
+</script>						

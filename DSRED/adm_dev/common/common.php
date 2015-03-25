@@ -24,7 +24,6 @@ $site_max_cnt		= $site_conf["site_max_cnt"];
 // 타임 존 설정.
 date_default_timezone_set($site_timezone);
 
-
 //$site_isLogin		= ($_COOKIE['isLogin'] == "") ? false : $_COOKIE['isLogin'];
 //$site_UID			= ($_COOKIE['usr_id'] == "") ? "" : $_COOKIE['usr_id'];
 //$site_UMAIL		= ($_COOKIE['user_mail'] == "") ? false : $_COOKIE['user_mail'];
@@ -38,7 +37,11 @@ $site_UTYPE		= empty($_SESSION['user_type']) ? "" : $_SESSION['user_type'];		// 
 
 // 로그인 점검
 if ($site_isLogin == true) {
-	$site_isLogin = ($site_UID != "" && $site_UMAIL != "");
+	$site_isLogin = ($site_UID != "");
+}
+
+if ($site_isDebug) {
+	ini_set('display_errors', 'On');
 }
 
 // 페이지 데이터
@@ -73,6 +76,7 @@ $t_domain_id	= ($_GET['d'] == "") ? "" : $_GET['d'];
 $processApp		= get_post("processApp");
 $processCmd		= get_post("processCmd");
 $processSeq		= get_post("processSeq");
+$processIsRun		= startWith($processApp, "process");
 $processStatus	= 0;						// 프로세스 처리 상태. 0:수행전, 1:수행완료, 2:결과 처리, 오류 표시
 $processMessage	= "";
 $processCallback	= get_post("processCallback");
