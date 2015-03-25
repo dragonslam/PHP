@@ -50,7 +50,7 @@ $(document).ready(function(){
 			return false;
 		}
 		login.attr("method", "post");
-		login.attr("auction", "?admin");
+		login.attr("auction", "?view=login");
 		return true;
 	});
 });

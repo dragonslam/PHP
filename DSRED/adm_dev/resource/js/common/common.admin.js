@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 
 	$("#btnLogout").click(function() {
-		fnCommander("member", "logout");
+		fnCommander("process_login", "logout");
 	});
 
 	$("#public-modal-dialog").dialog({
@@ -69,8 +69,8 @@ $(document).ready(function(){
 function fnCommander(app, cmd, identity, callback, isDelete, target, action) {
 	app			= typeof(app) == "string" ? app : "";
 	cmd			= typeof(cmd) == "string" ? cmd : "";
-	callback	= typeof(callback) == "string" ? callback : "";
-	action		= typeof(action) == "string" ? action : "";
+	callback		= typeof(callback) == "string" ? callback : "";
+	action		= typeof(action) == "string" ? action : _Query.getQuery();
 	identity		= identity ? identity : "0";	
 	if (cmd == "")	
 		return;
@@ -148,11 +148,12 @@ function fnRanderDataTable_Contents(dataTable, pAppl,  pCmd, pSeq, RowRander, ca
 		fnModalOpen("Contents Management", "목록을 출력할 수 없습니다.");
 		return false;
 	}
-
+	
+	/*
 	fnCallAjax({
-			 "processApp":pAppl
-			,"processCmd":pCmd
-			,"processSeq":pSeq
+			 "processApp"	: pAppl
+			,"processCmd"	: pCmd
+			,"processSeq"	: pSeq
 		}, 
 		function(data) {
 			if (data != "") {
@@ -172,6 +173,7 @@ function fnRanderDataTable_Contents(dataTable, pAppl,  pCmd, pSeq, RowRander, ca
 			}
 		}
 	);
+	*/
 }
 
 

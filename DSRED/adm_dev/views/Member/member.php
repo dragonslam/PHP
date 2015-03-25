@@ -1,4 +1,40 @@
-			
+		<?php _template_print_Contents_Header(); ?>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span8">					
+				<?php 
+									
+				$processApp = ($processApp == "") ? "Member" : $processApp;
+				$processCmd = ($processCmd == "") ? "list" : $processCmd;
+				
+				@include "../../common/process/".$processApp.".inc";
+				@include $processApp.".".$processCmd.".php";				
+				?>
+				</div>
+
+				<div class="span4">
+					<div class="widget-box">
+						<div class="widget-title">		
+							<span class="icon"><i class="icon-th-list"></i></span><h5>Connect Log</h5>
+						</div>
+						<div class="widget-content nopadding">
+							<table id="dataTable_LoginLog" class="table table-bordered table-striped table-hover data-table">
+							<thead>
+								<tr>
+									<th>로그인</th>
+									<th>로그아웃</th>
+									<th>관리자 ID</th>
+									<th>접속 IP</th>	
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+							</table>  
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 <script type="text/javascript">
 	$(document).ready(function(){
 		fnRanderDataTable_Contents("dataTable_LoginLog", "member", "getLoginLog", "-1", fnRanderDataLogRow, function() {
@@ -55,46 +91,5 @@
 				case 25 : return "supervisor";
 			}
 		}		
-	}
-	function fnGotoForm(memberSeq) {
-		fnCommander("member", "form", memberSeq, "", false, "", _Query.getQuery());
-	}
-</script>
-		<?php _template_print_Contents_Header(); ?>
-		
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="span8">					
-				<?php 
-									
-				$processApp = ($processApp == "") ? "member" : $processApp;
-				$processCmd = ($processCmd == "") ? "list" : $processCmd;
-				
-				@include $processApp.".".$processCmd.".php";
-				
-				?>
-				</div>
-
-				<div class="span4">
-					<div class="widget-box">
-						<div class="widget-title">		
-							<span class="icon"><i class="icon-th-list"></i></span><h5>Connect Log</h5>
-						</div>
-						<div class="widget-content nopadding">
-							<table id="dataTable_LoginLog" class="table table-bordered table-striped table-hover data-table">
-							<thead>
-								<tr>
-									<th>로그인</th>
-									<th>로그아웃</th>
-									<th>관리자 ID</th>
-									<th>접속 IP</th>	
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-							</table>  
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	}	
+</script>		

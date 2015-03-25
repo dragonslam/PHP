@@ -19,29 +19,35 @@
 		die();
 	}
 	
-	set_include_path( get_include_path() . PATH_SEPARATOR . "./common");
+	set_include_path( get_include_path() . PATH_SEPARATOR . "./common");	
 	
 	require "helpers.php";
+	require "dao_base.php";
 	
 	$conf = array();
-	@include ".conf/config.inc.php";
+	@include ".conf/config.inc";
 	if (empty($conf)) {
-		$action = 'noconfig';
+		print "need configration.";
+		die();
 	}
 	error_reporting(E_ALL);
 	
 	// common variable setting.. 
 	@include "common/common.php";
+	if ($site_isNewUser == true) {
+		//~Logging..
+		$_SESSION['isNewUser'] = false;
+	}
 	
-	// data processing..	
-	if ($processApp != "" && $processCmd != "") {
+	// data processing..	process
+	if ($processApp != "" && $processCmd != "" && startWith($processApp, "process")) {
 		
 		// login check...
-		@include "common/dac/login.inc";
+		@include "common/process/login.inc";
 		
 		if ($processStatus == 0) 
 		{	// Data Access Compoment Importing.
-			@include "common/dac/".$processApp.".inc";
+			@include "common/process/".$processApp.".inc";
 		}
 	}
 	

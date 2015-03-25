@@ -112,12 +112,7 @@ else {
 <script type="text/javascript">
 <!--	
 	var resource_root	= "<?php echo("$site_root$site_resource")?>";
-	var resource_max	= "<?php echo("$site_excel_max_cnt")?>";
-	var _DomainType		= "<?php echo("$t_domain_type"); ?>";
-	var _DomainID		= "<?php echo("$t_domain_id"); ?>";
-	var _DomainObj		= null;
-	var _DomainCaller	= {};
-	var _DomainDelay	= 0;		// 초단위 설정
+	var resource_max	= "<?php echo("$site_excel_max_cnt")?>";	
 	var _Query			= new Query();
 //-->
 </script>

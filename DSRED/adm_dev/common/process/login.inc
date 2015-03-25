@@ -15,7 +15,7 @@
 <?php 
 // 로그인 관련 명령어를 처리 한다. 
 
-if ($processApp == "member") {
+if ($processApp == "process_login") {
 	
 	if ($processCmd == "login") {
 		

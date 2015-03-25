@@ -22,7 +22,7 @@
 	</div>
 	<div id="loginbox">            
 		<form id="loginform" class="form-vertical">
-			<input type="hidden" name="processApp" value="member" />
+			<input type="hidden" name="processApp" value="process_login" />
 			<input type="hidden" name="processCmd" value="login" />
 			<p>Enter username and password to continue.</p>
 			<div class="control-group">

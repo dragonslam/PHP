@@ -37,6 +37,9 @@
 		row.append("</tr>");
 		return row.toString();
 	}
+	function fnGotoForm(memberSeq) {
+		fnCommander("member", "form", memberSeq, "", false, "", _Query.getQuery());
+	}
 </script>
 
 						<div class="widget-box">
