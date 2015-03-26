@@ -1,21 +1,41 @@
 <?php
 /**
- * 
+ * Common Data Access Component Interface
  * 
  * @author Dragonslam
  *
  */
 interface DataAccessComponentInterface {
+	
+	/**
+	 * 목록 데이터 조회
+	 */
 	public function getList();
+	
+	/**
+	 * 1Row 데이터 조회
+	 */
 	public function getData();
+	
+	/**
+	 * 검색
+	 */
 	public function getSearch();
+	
+	/**
+	 * 저장
+	 */
 	public function save();
+	
+	/**
+	 * 삭제
+	 */
 	public function delete();
 }
 
 /**
  * 
- * 
+ * Common Data Access Component
  * 
  * @author Dragonslam
  *
@@ -30,7 +50,13 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	protected $entity;
 	protected $entity_key;
 	
-	function __construct($datasource, $data_table, $data_entity = null)
+	/**
+	 * DAO 생성자
+	 * @param array $datasource
+	 * @param string $data_table
+	 * @param array $data_entity
+	 */
+	function __construct($datasource = null, $data_table = "", $data_entity = null)
 	{
 		if (empty($datasource) || empty($data_table)) {
 			return;
@@ -49,11 +75,20 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		$this->logging("Init()");
 	}	
 	
-	public function logging($msg) {
+	/**
+	 * 로그 출력
+	 * @param string $msg
+	 */
+	public function logging($msg = "") {
 		if (is_bool($this->conf["print_log"]) && $this->conf["print_log"] == true) {
 			echo "<br/>DataAccessComponentBase::".$msg;
 		}
 	}
+	
+	/**
+	 * 쿼리 실행. 
+	 * @return NULL|resource
+	 */
 	private function execute() {
 		$this->logging("execute()");
 		if (empty($this->query)) {
@@ -66,6 +101,11 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 			return $result;
 		}			
 	}
+	/**
+	 * 등록된 쿼리 실행.
+	 * @param unknown $query
+	 * @return NULL|boolean
+	 */
 	public function executeQuery($query) {
 		$this->logging("executeQuery()");
 		if (empty($query)) {
@@ -77,8 +117,11 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		}
 	}
 	
-	
-	public function setEntity($data_entity) {
+	/**
+	 * 테이블 스키마를 등록
+	 * @param array $data_entity
+	 */
+	public function setEntity($data_entity = null) {
 		$this->logging("setEntity()");
 		if (empty($data_entity)) {
 			return;
@@ -93,10 +136,32 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 			}
 		}		
 	}
+	
+	/**
+	 * 테이블 스키마를 반환
+	 * @return array $data_entity
+	 */
+	public function getEntity() {
+		$this->logging("getEntity()");		
+		return $this->entity;		
+	}
+	
+	/**
+	 * 목록 조회
+	 * @see DataAccessComponentInterface::getList()
+	 * @param int $page_size
+	 * @param int $page_count 
+	 */
 	public function getList($page_size = 10, $page_count = 1) {
 		$this->logging("getList($page_size, $page_count)");
 		return $this->execute();
 	}
+	
+	/**
+	 * 고유번호로 데이터 조회
+	 * @see DataAccessComponentInterface::getData()
+	 * @param int $seq
+	 */
 	public function getData($seq = 0) {
 		$this->logging("getData($seq)");
 		if (empty($seq) || $seq == 0) {
@@ -107,7 +172,15 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		));
 		return $this->execute();
 	}
-	public function getSearch($condition = null) {
+	
+	/**
+	 * 검색 조건으로 데이터 목록 검색
+	 * @see DataAccessComponentInterface::getSearch()
+	 * @param int $page_size
+	 * @param int $page_count 
+	 * @param array $condition
+	 */
+	public function getSearch($page_size = 10, $page_count = 1, $condition = null) {
 		$this->logging("getSearch()");
 		if (empty($condition)) {
 			return "-1";
@@ -115,12 +188,23 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		$this->SelectQueryGenerator($condition);
 		return $this->execute();
 	}
+	
+	/**
+	 * 데이터 저장
+	 * <pre>
+	 *  - 고유번호 정보가 없는 경우는 INSERT
+	 *  - 고유번호로 정보가 있으면 UPDATE
+	 * </pre>
+	 * @see DataAccessComponentInterface::save()
+	 * @param array $param
+	 * @param array $condition
+	 */
 	public function save($param = null, $condition = null) {
 		$this->logging("save()");
 		if (empty($param)) {
 			return "-1";
 		}
-		if (empty($param[$this->entity_key])) {
+		if (empty($param[$this->entity_key]) || $param[$this->entity_key] == "0") {
 			$this->InsertQueryGenerator($param);
 		}
 		else {
@@ -134,22 +218,36 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		}		
 		return $this->execute();
 	}
+	
+	/**
+	 * 데이터 삭제.
+	 * @see DataAccessComponentInterface::delete()
+	 * @param array $condition
+	 */
 	public function delete($condition = null) {
 		$this->logging("delete()");
 		if (empty($condition)) {
 			return "-1";
 		}
+		
 		$this->DeleteQueryGenerator($condition);
 		return $this->execute();
 	}
 
 
 	// Query Generator.. 
-	
+	/**
+	 * 검색쿼리 생성
+	 * @param array $condition
+	 */
 	private function SelectQueryGenerator($condition = null) {
 		$this->logging("SelectQueryGenerator()");
 	}
 
+	/**
+	 * 등록 쿼리 생성
+	 * @param array $param
+	 */
 	private function InsertQueryGenerator($param = null) {
 		$this->logging("InsertQueryGenerator()");
 		if (is_array($this->entity)) {
@@ -170,14 +268,20 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		} 
 	}
 
-	private function UpdateQueryGenerator($param, $condition = null) {		
+	/**
+	 * 수정쿼리 생성
+	 * @param array $param
+	 * @param array $condition
+	 */
+	private function UpdateQueryGenerator($param = null, $condition = null) {		
 		$this->logging("UpdateQueryGenerator()");
 		if (is_array($this->entity)) {
 			$query = "";
 			$count = 0;
 			while (list($key, $value) = each($this->entity)) {
 				if ($key != $this->entity_key) {
-					if (!empty($param[$key])) {
+					if (!empty($param[$key])) 
+					{	// 
 						$query  = $query.($count == 0 ? "\n  " : "\n ,").$this->getUpdateValue($key, $value, $param[$key]);
 						$count++;
 					}
@@ -188,11 +292,21 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		} 
 	}
 
+	/**
+	 * 삭제 쿼리 생성
+	 * @param array $condition
+	 */
 	private function DeleteQueryGenerator($condition = null) {
 		$this->logging("DeleteQueryGenerator()");
 		$this->query = "DELETE ".$this->table.$this->getCondition($condition);
 	}
 	
+	/**
+	 * 등록용 값 쿼리 생성
+	 * @param array $fild_type
+	 * @param string $value
+	 * @return string
+	 */
 	private function getInsertValue($fild_type, $value) {
 		$this->logging("getInsertValue()");
 		if (empty($fild_type)) {
@@ -236,6 +350,13 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		return $result;
 	}
 	
+	/**
+	 *  수정용 값 쿼리 생성. 
+	 * @param string $fild
+	 * @param array $fild_type
+	 * @param string $value
+	 * @return string
+	 */
 	private function getUpdateValue($fild, $fild_type, $value) {
 		$this->logging("getUpdateValue()");
 		if (empty($fild) || empty($fild_type)) {
@@ -286,6 +407,11 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		return " ".$result." ";
 	}
 	
+	/**
+	 * 조건 쿼리 생성
+	 * @param array $condition
+	 * @return string
+	 */
 	private function getCondition($condition = null) {
 		$this->logging("getCondition()");
 		if(empty($condition)) {
@@ -304,6 +430,8 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		}
 		return $q;
 	}
+	
+	
 	
 	private function getAES_ENC($value = "") {
 		if (empty($value)) {

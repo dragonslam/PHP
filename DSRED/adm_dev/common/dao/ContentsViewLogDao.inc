@@ -3,7 +3,7 @@
 //	Project Title	: Daesung Groupware
 //	Developer		: dragonslam@gmail.com
 //	Create date		: 2015-03-10
-//	Description		: LoginLog DAO.
+//	Description		: ContentsViewLog DAO.
 //
 //	Edit history
 // 
@@ -15,21 +15,20 @@
 <?php 
 
 /**
- * Login Log Dao
+ * ContentsViewLog Dao
  * 
  * @author DragonSLAM
  *
  */
-class LoginLogDao {
+class ContentsViewLogDao {
 	private $dao;
 	function __construct($datasource)
 	{
-		$this->dao = new DataAccessComponentBase($datasource, "LOG_LOGIN", array(
-				"USER_ID" 				=> array("isEncrypt"=>false, "datatype"=>"string"),
-				"USER_SESSION_ID"	=> array("isEncrypt"=>false, "datatype"=>"string"),
-				"LOGIN_IP" 				=> array("isEncrypt"=>false, "datatype"=>"string"),
-				"LOGIN_DT" 			=> array("isEncrypt"=>false, "datatype"=>"datetime"),
-				"LOGOUT_DT"			=> array("isEncrypt"=>false, "datatype"=>"datetime")
+		$this->dao = new DataAccessComponentBase($datasource, "LOG_CONTENTS_VIEW", array(				
+				"MENU_SEQ"	=> array("isEncrypt"=>false, "datatype"=>"int"),
+				"CONT_SEQ"	=> array("isEncrypt"=>false, "datatype"=>"int"),
+				"USER_ID" 		=> array("isEncrypt"=>false, "datatype"=>"string"),				
+				"VIEW_DT" 		=> array("isEncrypt"=>false, "datatype"=>"datetime")				
 		));
 	}
 
