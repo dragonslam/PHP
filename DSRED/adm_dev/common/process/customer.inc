@@ -13,7 +13,22 @@
 //'
 ?>
 <?php 
+if ($site_isDebug) echo "<br/>Customer Process - ". $processApp ."/". $processCmd;
+if ($processApp == "process_code") {
 
-	echo "<br/>Customer Process - ". $processApp ."/". $processCmd;
-
+	require "CustomerDao.inc";
+		
+	//$customerDao = new CustomerDao($site_datasource);	
+	
+	switch($processCmd) {
+		case "getList" :			
+			break;
+		case "getData" : 
+			break;
+		case "setData" :
+			break;
+		case "delData" :
+			break;
+	}
+}
 ?>

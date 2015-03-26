@@ -13,14 +13,12 @@
 //'
 ?>
 <?php 
-if ($site_isDebug) {
-	echo "<br/>Member Process - ". $processApp ."/". $processCmd;
-}
+if ($site_isDebug) echo "<br/>Member Process - ". $processApp ."/". $processCmd;
 if ($processApp == "process_member") {
 
 	require "MemberDao.inc";
 	
-	$memberDao = new MemberDao($site_datasource);	
+	//$memberDao = new MemberDao($site_datasource);	
 	
 	switch($processCmd) {
 		case "getList" :			

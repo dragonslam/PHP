@@ -9,6 +9,7 @@ $sys_site_domain	= $_SERVER['SERVER_NAME'];
 // 사이트 관련
 $site_isDebug		= true;
 $site_test_id		= "test";
+$site_logging_tp	= "";
 $site_conf			= $conf['sitesetting'][$sys_site_domain];
 $site_datasource	= $conf['datasources'][$site_conf["site_datasource"]];
 $site_timezone		= $site_conf["site_timezone"];
@@ -39,7 +40,7 @@ $site_UTYPE		= empty($_SESSION['user_type']) ? "" : $_SESSION['user_type'];		// 
 if ($site_isLogin == true) {
 	$site_isLogin = ($site_UID != "");
 }
-
+// 에러로그 출력
 if ($site_isDebug) {
 	ini_set('display_errors', 'On');
 }
@@ -71,7 +72,8 @@ $t_domain_id	= ($_GET['d'] == "") ? "" : $_GET['d'];
 //echo("<br/>$site_root$site_index");
 //echo("<br/>$site_root$site_resource");
 
-// //////////////////////////////////////////////////////////////////
+
+/* ****************************************************************** */
 // Process Info
 $processApp		= get_post("processApp");
 $processCmd		= get_post("processCmd");
@@ -82,5 +84,5 @@ $processMessage	= "";
 $processCallback	= get_post("processCallback");
 $processGotoUrl	= ($_SERVER['QUERY_STRING'] == "") ? "" : "?".$_SERVER['QUERY_STRING'];
 $processScript		= "";
-
+/* ****************************************************************** */
 ?>

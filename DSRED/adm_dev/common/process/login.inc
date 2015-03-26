@@ -20,8 +20,8 @@ if ($processApp == "process_login") {
 	require "LoginLogDao.inc";
 	require "MemberDao.inc";
 	
-	$loginDao = new LoginLogDao($site_datasource);
-	$memberDao = new MemberDao($site_datasource);			
+	//$loginDao = new LoginLogDao($site_datasource);
+	//$memberDao = new MemberDao($site_datasource);			
 	
 	if ($processCmd == "login") {
 		
