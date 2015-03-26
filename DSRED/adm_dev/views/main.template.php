@@ -33,7 +33,7 @@ function _template_print_Contents_Header() {
 		<div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
                 <li class="btn btn-inverse" onclick='fnCommander("ADMIN_MANAG", "form", "<?php echo $site_UID; ?>", "", false, "", "?admin=15&view=ADMIN_MANAG" );'><a title="내 정보 관리" id="btnAdminProfile"><i class="icon icon-user"></i> <span class="text">Profile</span></a></li>
-                <!--li class="btn btn-inverse"><a title="" id="btnSettings"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li-->
+                <li class="btn btn-inverse"><a title="" id="btnSettings"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li>
                 <li class="btn btn-inverse"><a title="관리자 로그아웃" id="btnLogout"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
             </ul>
         </div>

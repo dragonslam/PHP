@@ -35,15 +35,6 @@
 	
 	// common variable setting.. 
 	@include "common/common.php";
-	if ($site_isNewUser == true) {
-		//~Logging..
-		$_SESSION['isNewUser'] = false;
-	}
-	
-	echo "<br/>".$site_datasource["host"];
-	echo "<br/>".$site_datasource["user"];
-	echo "<br/>".$site_datasource["password"];
-	$con = mysql_connect($site_datasource["host"].":".$site_datasource["port"], $site_datasource["user"], $site_datasource["password"]);	
 	
 	// data processing..	process
 	if ($processIsRun == true) {
@@ -56,6 +47,22 @@
 			@include "common/process/".str_replace("process_", "", $processApp).".inc";
 		}
 	}
+	else {	
+		if ($site_isNewUser == true) {			
+			//~Logging..
+			$site_logging_tp = "visit_log";
+			@include "common/process/logging.inc";
+			$_SESSION['isNewUser'] = false;
+		}
+	}
+	
+	/*
+	 // db test
+	 echo "<br/>".$site_datasource["host"];
+	 echo "<br/>".$site_datasource["user"];
+	 echo "<br/>".$site_datasource["password"];
+	 $con = mysql_connect($site_datasource["host"].":".$site_datasource["port"], $site_datasource["user"], $site_datasource["password"]);
+	 */
 	
 	// view load..
 	@include "views/page.template.php";

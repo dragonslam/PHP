@@ -1,21 +1,21 @@
 <?php _template_print_Contents_Header(); ?>
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span8">					
+		<div class="span6">
 		
 		<?php
-		$processApp = ($processApp == "") ? "process_member" : $processApp;
+		$processApp = ($processApp == "") ? "visit_statictics" : $processApp;
 		$processCmd = ($processCmd == "") ? "list" : $processCmd;				
-				
-		@include "customer.list.php";						
+		
+		@include "visit_statictics.list.php";				
 		?>
 		</div>
 		
-		<div class="span4">
+		<div class="span6">
 		<?php
 		
-		@include "customer.form.php";
+		@include "visit_statictics.form.php";
 		?>			
 		</div>
 	</div>
-</div>
+</div>	

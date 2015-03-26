@@ -59,7 +59,8 @@
 						<li><a href="?view=System&action=address">주소정보 관리</a></li>
 						<li><a href="?view=System&action=menu">메뉴정보 관리</a></li>						
 						<li><a href="?view=System&action=code">공통코드 관리</a></li>
-						<li><a href="?view=System&action=statictics">사용자 접속통계</a></li>
+						<li><a href="?view=System&action=visit_statictics">사용자 접속통계</a></li>
+						<li><a href="?view=System&action=view_statictics">데이터 조회기록</a></li>
 					</ul>
 				</li>
 			</ul>	

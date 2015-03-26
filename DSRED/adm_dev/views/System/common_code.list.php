@@ -7,7 +7,7 @@ PS_Script("/js/jquery.plugin/dynatree-1.2.4/jquery.dynatree.js", "jquery-dynatre
 						<div class="widget-box">
 							<div class="widget-title"> 
 								<span class="icon"><i class="icon-th-list"></i></span>
-								<h5>System Menu</h5>
+								<h5>System Code</h5>
 								<div class="buttons">									
 									<a href="#" class="btn btn-mini" id="btn_CartExpand"><i class="icon-tags"></i> Expand all</a>
 									<a href="#" class="btn btn-mini" id="btn_CartCollapse"><i class="icon-tag"></i> Collapse all</a>

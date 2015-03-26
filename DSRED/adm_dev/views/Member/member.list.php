@@ -30,7 +30,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
-		fnRanderDataTable_Contents("dataTable_Manager", "member", "getList", "-1", fnRanderDataRow, function() {
+		fnRanderDataTable_Contents("dataTable_Manager", "process_member", "getList", "-1", fnRanderDataRow, function() {
 			$("#dataTable_Manager").dataTable({
 				"bJQueryUI": true,
 				"bPaginate": true,

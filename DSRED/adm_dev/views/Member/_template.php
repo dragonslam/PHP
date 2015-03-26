@@ -30,7 +30,7 @@
 			break;
 			
 		default :
-			$page_title = "임차인 관리";
+			$page_title = "사용자 관리";
 			@include "member.php";
 	}	
 ?>

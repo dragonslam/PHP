@@ -318,5 +318,27 @@ function fnViewDataRefine(data) {
 		}
 	}			
 }
-
-
+function fnGetUserType(data) {
+	data = String(data);
+	if (data.isEmpty() || data == "null")
+		return "";
+	else
+		return (data.trim() == "1") ? "회원" : "관리자";
+}
+function fnGetUserLevel(data) {
+	data = String(data);
+	if (data.isEmpty() || data == "null")
+		return "";
+	else {
+		switch (data.int()) {
+			case 10 : return "user";
+			case 20 : return "manager";
+			case 25 : return "supervisor";
+		}
+	}		
+}	
+function fnResetForm() {
+	$("input:text").each(function(o) {
+		$(this).val(String($(this).attr("placeholder")).isEmpty() ? "" : String($(this).attr("placeholder")));			
+	});
+}

@@ -1,36 +1,54 @@
 
 						<div class="widget-box">
 							<div class="widget-title">		
-								<span class="icon"><i class="icon-file"></i></span><h5>Address Form</h5>
+								<span class="icon"><i class="icon-file"></i></span><h5>Manager Authentication Form</h5>
 								<div class="buttons">
 									<a href="#" class="btn btn-mini" id="btn_ResetT"><i class="icon-repeat"></i> Reset</a>
 								</div>
 							</div>
 							
-							<input type="hidden" name="code_Group" id="cCode_Group" value="" />
+							<input type="hidden" name="AUTH_TP_CD" id="cAUTH_TP_CD" value="" />
+							<input type="hidden" name="USER_LV_CD" id="cUSER_LV_CD" value="" />
+							<input type="hidden" name="USER_ID" id="cUSER_ID" value="" />
 							<div class="widget-content nopadding">
-								<table id="dataTable_Manager" class="table table-bordered table-striped table-hover data-table">									
-									<tr>
-										<th>우편번호</th>
-										<td><input type="text" name="code_ID" id="cCode_ID" value="<?php echo $cCODE_ID; ?>" placeholder="우편번호" validation="valid" /></td>										
-									</tr>
-									<tr>
-										<th>시/도</th>
-										<td><input type="text" name="code_NM" id="cCode_NM" value="<?php echo $cCODE_NM; ?>" placeholder="시/도" validation="valid" /></td>
-									</tr>
-									<tr>
-										<th>군/구</th>
-										<td><input type="text" name="code_Value" id="cCode_Value" value="<?php echo $cCODE_Value; ?>" placeholder="군/구" validation="valid" /></td>
-									</tr>
-									<tr>
-										<th>도/동</th>
-										<td><input type="text" name="code_Value" id="cCode_Value" value="<?php echo $cCODE_Value; ?>" placeholder="도/동" validation="valid" /></td>
-									</tr>
-									<tr>
-										<th>상세주소</th>
-										<td><input type="text" name="code_Value" id="cCode_Value" value="<?php echo $cCODE_Value; ?>" placeholder="상세주소" validation="valid" /></td>
-									</tr>
-									
+								<table id="dataTable_Manager" class="table table-bordered table-striped table-hover">
+									<thead>
+										<tr>
+											<th rowspan="2">메뉴</th>
+											<th colspan="7">권한</th>												
+										</tr>
+										<tr>											
+											<th><input type="checkbox" id="title_AUTH_LIST_YN"/>목록</th>												
+											<th><input type="checkbox" id="title_AUTH_VIEW_YN"/>읽기</th>
+											<th><input type="checkbox" id="title_AUTH_INSERT_YN"/>등록</th>
+											<th><input type="checkbox" id="title_AUTH_MODIFY_YN"/>수정</th>
+											<th><input type="checkbox" id="title_AUTH_DELETE_YN"/>삭제</th>
+											<th><input type="checkbox" id="title_AUTH_PRINT_YN"/>인쇄</th>
+											<th><input type="checkbox" id="title_AUTH_EXPORT_YN"/>출력</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>사용자 관리</td>
+											<td><input type="checkbox" name="AUTH_LIST_YN_1" id="cAUTH_LIST_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_VIEW_YN_1" id="cAUTH_VIEW_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_INSERT_YN_1" id="cAUTH_INSERT_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_MODIFY_YN_1" id="cAUTH_MODIFY_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_DELETE_YN_1" id="cAUTH_DELETE_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_PRINT_YN_1" id="cAUTH_PRINT_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_EXPORT_YN_1" id="cAUTH_EXPORT_YN_1" value="Y"/></td>											
+										</tr>	
+										<tr>
+											<td>사용자 그룹관리</td>
+											<td><input type="checkbox" name="AUTH_LIST_YN_1" id="cAUTH_LIST_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_VIEW_YN_1" id="cAUTH_VIEW_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_INSERT_YN_1" id="cAUTH_INSERT_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_MODIFY_YN_1" id="cAUTH_MODIFY_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_DELETE_YN_1" id="cAUTH_DELETE_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_PRINT_YN_1" id="cAUTH_PRINT_YN_1" value="Y"/></td>
+											<td><input type="checkbox" name="AUTH_EXPORT_YN_1" id="cAUTH_EXPORT_YN_1" value="Y"/></td>											
+										</tr>									
+									</tbody>
 								</table>  
 							</div>
 							<div class="buttons">										

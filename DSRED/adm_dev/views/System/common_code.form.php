@@ -2,7 +2,7 @@
 						<div class="widget-box">
 							<div class="widget-title">								
 								<span class="icon"><i class="icon-file"></i></span>
-								<h5>System Menu Form</h5>
+								<h5>System Code Form</h5>
 								<div class="buttons">
 									<a href="#" class="btn btn-mini" id="btn_CartReset"><i class="icon-repeat"></i> Reset</a>
 								</div>
