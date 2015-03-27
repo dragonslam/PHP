@@ -38,9 +38,9 @@
 				"bFilter": true,
 				"bSort": true,
 				"bInfo": false,
-				"bAutoWidth": true,
+				"bAutoWidth": false,
 				"iDisplayLength" : 20,
-				"aaSorting": [[ 6, "desc" ]],
+				"aaSorting": [[ 0, "desc" ]],
 				"sPaginationType": "full_numbers",
 				"sDom": '<""l>t<"F"fp>'
 			});
@@ -55,9 +55,11 @@
 		row.append("<tr>");
 		row.append("	<td>"+ oRowData.USER_SEQ +"</td>");
 		row.append("	<td>"+ oRowData.USER_ID +"</td>");
-		row.append("	<td><a onclick='fnGotoForm(\""+ oRowData.USER_SEQ +"\");'>"+ fnViewDataRefine(oRowData.USER_NM) +"</a></td>");
-		row.append("	<td class='center'>"+ fnGetUserType(oRowData.USER_Type) +"</td>");
-		row.append("	<td class='center'>"+ fnGetUserLevel(oRowData.USER_Level) +"</td>");
+		row.append("	<td><a onclick='fnGotoForm(\""+ oRowData.USER_ID +"\");'>"+ fnViewDataRefine(oRowData.USER_NM) +"</a></td>");
+		row.append("	<td class='center'>"+ fnViewDataRefine(oRowData.USER_TP_NM) +"</td>");
+		row.append("	<td class='center'>"+ fnViewDataRefine(oRowData.USER_LV_NM) +"</td>");
+		//row.append("	<td class='center'>"+ fnGetUserType(oRowData.USER_TP_CD) +"</td>");
+		//row.append("	<td class='center'>"+ fnGetUserLevel(oRowData.USER_LV_CD) +"</td>");
 		row.append("	<td class='center'>"+ fnViewDataRefine(oRowData.LOGIN_CNT) +"</td>");
 		row.append("	<td class='center'>"+ fnViewDataRefine(oRowData.LOGIN_DT) +"</td>");
 		row.append("	<td class='center'>"+ fnViewDataRefine(oRowData.CREATE_NM) +"</td>");
@@ -67,7 +69,7 @@
 		row.append("</tr>");
 		return row.toString();
 	}
-	function fnGotoForm(memberSeq) {
-		fnCommander("member", "form", memberSeq, "", false, "", _Query.getQuery());
+	function fnGotoForm(memberID) {
+		fnCommander("member", "form", memberID, "", false, "", _Query.getQuery());
 	}
 </script>						

@@ -10,6 +10,15 @@ var $isDebug	= true;
 var $debug		= function(msg) {if ($isDebug) {window.console.log(msg);}};
 
 /*--------------------------------------------------------------------------------*\
+* Find Object 
+/*--------------------------------------------------------------------------------*/
+var $O = function(objectID) {
+	if (String(objectID).isEmpty()) 
+		return false;
+	else 
+	return document.getElementById(objectID);
+}
+/*--------------------------------------------------------------------------------*\
 * Dynamic script loading 
 /*--------------------------------------------------------------------------------*/
 var LoadScript = function(url, callback, charset, defer, id) {
@@ -497,3 +506,31 @@ var Cache = function(type, span/* integer */, format/* s, m, h, d, M, y, w */) {
     };
 };
 
+/*--------------------------------------------------------------------------------*\
+* Set Value to Object
+\*--------------------------------------------------------------------------------*/
+var SetValue = function(objectID, value) {
+	if (String(objectID).isEmpty()) return;
+	var o = $O(objectID);
+	if (o) {
+		switch (o.tagName) {
+		case "INPUT":
+				switch (o.type) {
+				case "text" :
+					o.value = value;
+					break;
+				case "radio" :
+					break;
+				case "checkbox" :
+					break;
+				}
+			break;
+		case "SELECT":
+			o.value = value;
+			break;
+		default :
+			o.innerText = value;
+			break;
+		}
+	}
+}

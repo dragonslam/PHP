@@ -11,60 +11,58 @@
 		<table id="dataTable_Manager" class="table table-bordered table-striped table-hover data-table">									
 			<tr>
 				<th>아이디</th>
-				<td><input type="text" name="user_ID" id="cUser_ID" value="<?php echo $cUser_ID; ?>" placeholder="아이디" validation="userid" /></td>
+				<td><input type="text" name="USER_ID" id="cUSER_ID" value="" placeholder="아이디" validation="userid" /></td>
 				<th>비밀번호</th>
-				<td><input type="text" name="user_PW" id="cUser_PW" value="<?php echo $cUser_PW; ?>" placeholder="비밀번호" validation="password" /></td>
+				<td><input type="text" name="USER_PW" id="cUSER_PW" value="" placeholder="비밀번호" validation="password" /></td>
 			</tr>
 			<tr>
 				<th>사용자 타입</th>
 				<td>
-					<select name="user_TYPE" id="cUser_TYPE">
-						<option value="1"<?php echo(($cUser_TYPE == "1") ? " selected" : ""); ?>>일반회원</option>
-						<option value="2"<?php echo(($cUser_TYPE == "2") ? " selected" : ""); ?>>관 리 자</option>
+					<select name="USER_TP_CD" id="cUSER_TP_CD">
+						<option value="4">일반회원</option>
+						<option value="5">관 리 자</option>
 					</select>
 				</td>
 				<th>사용자 권한</th>
 				<td>
-					<select name="user_LEVEL" id="cUser_LEVEL">
-						<option value="10"<?php echo(($cUser_LEVEL == "10") ? " selected" : ""); ?>>사용자</option>
-						<option value="20"<?php echo(($cUser_LEVEL == "20") ? " selected" : ""); ?>>관리자</option>
-						<option value="30"<?php echo(($cUser_LEVEL == "30") ? " selected" : ""); ?>>시스템관리자</option>
+					<select name="USER_LV_CD" id="cUSER_LV_CD">
+						<option value="10">사용자</option>
+						<option value="20">관리자</option>
+						<option value="30">시스템관리자</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td><input type="text" name="user_NM" id="cUser_NM" value="<?php echo $cUser_NM; ?>" placeholder="사용자 이름" validation="valid" /></td>
+				<td><input type="text" name="USER_NM" id="cUSER_NM" value="<?php echo $cUser_NM; ?>" placeholder="사용자 이름" validation="valid" /></td>
 				<th>이메일</th>
-				<td><input type="text" name="user_EMail" id="cUser_Mail" value="<?php echo $cUser_Mail; ?>" placeholder="사용자 이메일" validation="email" /></td>
+				<td><input type="text" name="USER_Email" id="cUSER_Email" value="<?php echo $cUser_Mail; ?>" placeholder="사용자 이메일" validation="email" /></td>
 			</tr>
 			<tr>
 				<th>전화</th>
-				<td><input type="text" name="user_Phone" id="cUser_Phone" value="<?php echo $cUser_Phone; ?>" placeholder="전화번호" validation="phone" /></td>
+				<td><input type="text" name="USER_Tel" id="cUSER_Tel" value="<?php echo $cUser_Phone; ?>" placeholder="전화번호" validation="phone" /></td>
 				<th>모바일</th>
-				<td><input type="text" name="user_Mobile" id="cUser_Mobile" value="<?php echo $cUser_Mobile; ?>" placeholder="핸드폰번호" validation="mobile" /></td>
+				<td><input type="text" name="USER_Mobile" id="cUSER_Mobile" value="<?php echo $cUser_Mobile; ?>" placeholder="핸드폰번호" validation="mobile" /></td>
 			</tr>
-			<?php if ($processSeq != "" && $processSeq != "0") { ?>
-			<tr>
+			<tr id="row_CREATE_INFO" style="display:none;">
 				<th>등록일</th>
-				<td><?php echo $cUser_Phone; ?></td>
+				<td><span id="cCREATE_DT"></span></td>
 				<th>등록자</th>
-				<td><?php echo $cUser_Mobile; ?></td>
+				<td><span id="cCREATE_NM"></span>(<span id="cCREATE_ID"></span>)</td>
 			</tr>
-			<tr>
+			<tr id="row_UPDATE_INFO" style="display:none;">
 				<th>수정일</th>
-				<td><?php echo $cUser_Phone; ?></td>
+				<td><span id="cUPDATE_DT"></span></td>
 				<th>수정자</th>
-				<td><?php echo $cUser_Mobile; ?></td>
+				<td><span id="cUPDATE_NM"></span>(<span id="cUPDATE_ID"></span>)</td>
 			</tr>
-			<tr>
+			<tr id="row_LOGIN_INFO" style="display:none;">
 				<th>최근접속 시간</th>
-				<td><?php echo $cUser_Phone; ?></td>
+				<td><span id="cLOGIN_DT"></span></td>
 				<th>최근접속 IP</th>
-				<td><?php echo $cUser_Mobile; ?></td>
+				<td><span id="cLOGIN_IP"></span></td>
 			</tr>									
-			<?php } ?>
-		</table>  
+		</table>   
 	</div>
 	<div class="buttons">										
 		<button id="btn_Save" value="Save" class="btn btn-success"><i class="icon-check icon-white"></i> 저장</button>
@@ -137,7 +135,7 @@
 
 			//return;
 			if (isValid) {
-				fnCommander("member", "SaveProcess", processSeq, "", false, "");
+				fnCommander("process_member", "setData", processSeq, "", false, "");
 			}
 			return;
 		});
@@ -148,7 +146,33 @@
 			fnResetForm(); 
 		});
 		$("#btn_List").click(function() { 
-			fnCommander("admin-manager", "list");
+			fnCommander("member", "list");
 		});
+
+		if (processSeq != "") {
+			fnCallAjax({
+					 "processApp":"process_member"
+					,"processCmd":"getData"
+					,"processSeq":processSeq
+				}, 
+				function(data) {
+					if (data != "") {
+						var oData = $.parseJSON(data);
+						if (oData == null && oData.length > 0) return;
+						$(oData).each(function(e) {
+							for (var oID in oData[e]) {
+								SetValue("c"+ oID, oData[e][oID]);						            
+					        }					        
+						});
+						$("#row_CREATE_INFO").show().fadeIn('fast'); 
+						$("#row_UPDATE_INFO").show().fadeIn('fast');
+						$("#row_LOGIN_INFO").show().fadeIn('fast');
+					}
+					else {
+						fnModalOpen("Contents Management", "검색된 정보가 없습니다.");
+					}
+				}
+			);
+		}
 	});
 </script>

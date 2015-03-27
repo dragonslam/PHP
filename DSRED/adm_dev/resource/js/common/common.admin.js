@@ -14,6 +14,14 @@ $(document).ready(function(){
 	$("#btnLogout").click(function() {
 		fnCommander("process_login", "logout");
 	});
+	$("#btn_main_search").click(function() {
+		fnCommander("realestate", "search", $("#txt_main_search").val(), "", "", "", "?view=Realestate&action=list")
+	});
+	$("#txt_main_search").keydown(function(e) {
+		if (e.keyCode == 13 && $(this).val() != "") {
+			fnCommander("realestate", "search", $(this).val(), "", "", "", "?view=Realestate&action=list")
+		}
+	});
 
 	$("#public-modal-dialog").dialog({
 		autoOpen: false,
@@ -24,7 +32,6 @@ $(document).ready(function(){
 			}
 		}
 	});
-
 
 	$.datepicker.regional['ko'] = {
 		closeText: '닫기',
@@ -97,7 +104,7 @@ function fnCallAjax(params, callback) {
 		, url: './index.php'
 		, data: params
 		, beforeSend: function() {
-			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+			$('#ajax_load_indicator').show().fadeIn('fast'); 
 		}
 		, success: function(data) {
 			var response = data.trim();
@@ -112,7 +119,7 @@ function fnCallAjax(params, callback) {
 			alert('서버와의 통신이 실패했습니다.');
 		}
 		, complete: function() { 
-			//$('#ajax_load_indicator').fadeOut();
+			$('#ajax_load_indicator').fadeOut();
 		}
 	});
 }
@@ -124,7 +131,7 @@ function fnCallXML(params, callback) {
 		, data: params
 		, dataType: "xml"
 		, beforeSend: function() {
-			//$('#ajax_load_indicator').show().fadeIn('fast'); 
+			$('#ajax_load_indicator').show().fadeIn('fast'); 
 		}
 		, success: function(data) {
 			var response = data;
@@ -139,7 +146,7 @@ function fnCallXML(params, callback) {
 			alert('서버와의 통신이 실패했습니다.');
 		}
 		, complete: function() { 
-			//$('#ajax_load_indicator').fadeOut();
+			$('#ajax_load_indicator').fadeOut();
 		}
 	});
 }
@@ -148,8 +155,7 @@ function fnRanderDataTable_Contents(dataTable, pAppl,  pCmd, pSeq, RowRander, ca
 		fnModalOpen("Contents Management", "목록을 출력할 수 없습니다.");
 		return false;
 	}
-	
-	/*
+
 	fnCallAjax({
 			 "processApp"	: pAppl
 			,"processCmd"	: pCmd
@@ -172,8 +178,7 @@ function fnRanderDataTable_Contents(dataTable, pAppl,  pCmd, pSeq, RowRander, ca
 				callback(data);
 			}
 		}
-	);
-	*/
+	);	
 }
 
 
@@ -298,7 +303,7 @@ function fnFileUploader(oForm) {
 	oForm.enctype = "multipart/form-data";
 	oForm.method = "post";
 	oForm.target = "frameProcess";
-	oForm.action = "fileUploader.asp";
+	oForm.action = "fileUploader.php";
 	oForm.submit();
 } 
 
@@ -318,27 +323,68 @@ function fnViewDataRefine(data) {
 		}
 	}			
 }
+
 function fnGetUserType(data) {
 	data = String(data);
 	if (data.isEmpty() || data == "null")
 		return "";
-	else
-		return (data.trim() == "1") ? "회원" : "관리자";
+	else {
+		switch (data.parseInt()) {
+			case 1 : return "Guest";
+			case 2 : return "Customer";
+			case 3 : return "Branch";
+			case 4 : return "Manager";
+			case 5 : return "Administrator";
+		}	
+	}
 }
 function fnGetUserLevel(data) {
 	data = String(data);
 	if (data.isEmpty() || data == "null")
 		return "";
 	else {
-		switch (data.int()) {
-			case 10 : return "user";
-			case 20 : return "manager";
-			case 25 : return "supervisor";
+		switch (data.parseInt()) {
+			case 10 : return "Member";
+			case 20 : return "Manager";
+			case 30 : return "Supervisor";
 		}
 	}		
-}	
-function fnResetForm() {
-	$("input:text").each(function(o) {
-		$(this).val(String($(this).attr("placeholder")).isEmpty() ? "" : String($(this).attr("placeholder")));			
-	});
+}
+
+function fnPageLink(q) {
+	var L	= document.location;
+	var Q = q ? q : (_Query.q ? _Query.q : '');
+	if (String(window._DomainType).isEmpty() || String(window._DomainID).isEmpty())
+		document.location.replace(L.protocol +"//" + L.host + L.pathname +"?q="+Q);
+	else
+		document.location.replace(L.protocol +"//" + L.host + L.pathname +"?q="+Q+"&t="+ _DomainType +"&d="+ _DomainID);
+}
+function fnCallMessage(id, tp) {
+	if (window.$Message instanceof com.ds.message.hendler) {		
+		return window.$Message.call((String(id).isEmpty() ? '' : id), (String(tp).isEmpty() ? '' : tp));
+	}
+}
+function fnGetMessage(id, tp) {
+	if (window.$Message instanceof com.ds.message.hendler) {		
+		return window.$Message.get((String(id).isEmpty() ? '' : id), (String(tp).isEmpty() ? '' : tp));
+	}
+	return '';
+}
+function fnGetHtmlMessage(id) {
+	return "<div style='padding:20px;color:#6e84be;'>"+fn_GetMessage(id)+"</div>";
+}
+function fnCopyText(o) {
+	if (typeof o[0] != 'object') return;
+	if (window.clipboardData) {		
+		window.clipboardData.setData('Text',o.text());
+		fn_CallMessage("SYS_CLIPBOARD_COPY");
+	} 
+	else {
+		o.zclip({
+			path:resource_root+'/js/plugin.zclip/ZeroClipboard.swf',
+			copy:function(){
+				return o.text();
+			}
+		});	
+	}
 }

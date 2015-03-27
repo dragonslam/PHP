@@ -21,6 +21,11 @@ interface DataAccessComponentInterface {
 	 * 검색
 	 */
 	public function getSearch();
+
+	/**
+	 * 확인
+	 */
+	public function isValid();
 	
 	/**
 	 * 저장
@@ -66,7 +71,8 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		}
 		$this->conf			= $datasource;
 		$this->table		= $data_table;
-		$this->connect	= mysql_connect($this->conf["host"].":".$this->conf["port"], $this->conf["user"], $this->conf["password"]);
+		$this->connect	= mysql_connect($this->conf["host"].":".$this->conf["port"], $this->conf["user"], $this->conf["password"])
+										or die ('Could not connect to the database server' . mysqli_connect_error());
 
 		if (!$this->connect) {
 			die('Could not connect: ' . mysql_error());
@@ -76,12 +82,20 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	}	
 	
 	/**
+	 * DAO 소멸자
+	 */
+	function __destruct() {
+		$this->logging("destruct()");
+		mysql_close($this->connect);
+	}
+
+	/**
 	 * 로그 출력
 	 * @param string $msg
 	 */
-	public function logging($msg = "") {
+	protected function logging($msg = "") {
 		if (is_bool($this->conf["print_log"]) && $this->conf["print_log"] == true) {
-			echo "<br/>DataAccessComponentBase::".$msg;
+			print("<br/>DataAccessComponentBase::".$msg."\n");
 		}
 	}
 	
@@ -89,7 +103,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * 쿼리 실행. 
 	 * @return NULL|resource
 	 */
-	private function execute() {
+	protected function execute() {
 		$this->logging("execute()");
 		if (empty($this->query)) {
 			return null;
@@ -106,7 +120,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * @param unknown $query
 	 * @return NULL|boolean
 	 */
-	public function executeQuery($query) {
+	protected function executeQuery($query) {
 		$this->logging("executeQuery()");
 		if (empty($query)) {
 			return null;
@@ -121,7 +135,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * 테이블 스키마를 등록
 	 * @param array $data_entity
 	 */
-	public function setEntity($data_entity = null) {
+	protected function setEntity($data_entity = null) {
 		$this->logging("setEntity()");
 		if (empty($data_entity)) {
 			return;
@@ -141,7 +155,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * 테이블 스키마를 반환
 	 * @return array $data_entity
 	 */
-	public function getEntity() {
+	protected function getEntity() {
 		$this->logging("getEntity()");		
 		return $this->entity;		
 	}
@@ -151,9 +165,11 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * @see DataAccessComponentInterface::getList()
 	 * @param int $page_size
 	 * @param int $page_count 
+	 * @param array $sort
 	 */
-	public function getList($page_size = 10, $page_count = 1) {
+	public function getList($page_size = 10, $page_count = 1, $sort = null) {
 		$this->logging("getList($page_size, $page_count)");
+		$this->SelectQueryGenerator($page_size, $page_count, $sort);
 		return $this->execute();
 	}
 	
@@ -165,9 +181,9 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	public function getData($seq = 0) {
 		$this->logging("getData($seq)");
 		if (empty($seq) || $seq == 0) {
-			return "-1";
+			die('Not found arguments.');
 		}
-		$this->SelectQueryGenerator(array(
+		$this->SelectQueryGenerator(1, 1, array(
 			$this->entity_key => $seq
 		));
 		return $this->execute();
@@ -179,14 +195,25 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * @param int $page_size
 	 * @param int $page_count 
 	 * @param array $condition
+ 	 * @param array $sort
 	 */
-	public function getSearch($page_size = 10, $page_count = 1, $condition = null) {
-		$this->logging("getSearch()");
+	public function getSearch($page_size = 10, $page_count = 1, $condition = null, $sort = null) {
+		$this->logging("getSearch($page_size, $page_count)");
 		if (empty($condition)) {
-			return "-1";
+			die('Not found arguments.');
 		}
-		$this->SelectQueryGenerator($condition);
+		$this->SelectQueryGenerator($page_size, $page_count, $condition, $sort);
 		return $this->execute();
+	}
+
+	/**
+	 * 검색 조건으로 데이터 확인
+	 * @see DataAccessComponentInterface::isValid()
+	 * @param array $condition
+	 */
+	public function isValid($condition = null) {
+		$this->logging("isValid()");		
+		return (mysql_num_rows($this->getSearch(1, 1, $condition)) > 0);
 	}
 	
 	/**
@@ -202,20 +229,18 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	public function save($param = null, $condition = null) {
 		$this->logging("save()");
 		if (empty($param)) {
-			return "-1";
+			die('Not found arguments.');
 		}
-		if (empty($param[$this->entity_key]) || $param[$this->entity_key] == "0") {
+		if (empty($condition)) 
+		{	// 조회조건 없으면 무조건 등록
 			$this->InsertQueryGenerator($param);
 		}
-		else {
-			$result = $this->getData($param[$this->entity_key]);
-			if (mysql_num_rows($result) > 0) {
-				$this->UpdateQueryGenerator($param, $condition);				
+		else {			
+			if ($this->isValid($condition)) 
+			{	// 조회해서 있으면 수정.
+				$this->UpdateQueryGenerator($param, $condition);
 			}
-			else {
-				$this->InsertQueryGenerator($param);
-			}			
-		}		
+		}
 		return $this->execute();
 	}
 	
@@ -227,21 +252,126 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	public function delete($condition = null) {
 		$this->logging("delete()");
 		if (empty($condition)) {
-			return "-1";
+			die('Not found arguments.');
 		}
 		
 		$this->DeleteQueryGenerator($condition);
 		return $this->execute();
 	}
 
+	/**
+	 * MySql result to JSON.
+	 * @param MySqlResult $result
+	 * @return JSON
+	 */
+	public function toJSON($result) {
+		$this->logging("toJSON()");		
+		$rows = array();
+		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)){
+			$rows[] = $row;
+		}
+		return json_encode($rows);
+	}
+
 
 	// Query Generator.. 
 	/**
 	 * 검색쿼리 생성
+	 * @param int $page_size
+	 * @param int $page_count 
 	 * @param array $condition
+	 * @param array $sort	 
 	 */
-	private function SelectQueryGenerator($condition = null) {
+	private function SelectQueryGenerator($page_size = 10, $page_count = 1, $condition = null, $sort = null) {
 		$this->logging("SelectQueryGenerator()");
+		if (is_array($this->entity)) {
+			$fildsQuery = "";
+			$count = 0;
+			while (list($key, $value) = each($this->entity)) 
+			{
+				$q = ($count == 0 ? "\n  " : "\n ,")."A.".$key." AS ".$key;
+				if (is_string($value["datatype"])) {
+					switch($value["datatype"]) {
+						case "int" : 					
+							break;
+						case "string" :							 
+								if (is_bool($value["isEncrypt"]) && $value["isEncrypt"] == true) {
+									$q = ($count == 0 ? "\n  " : "\n ,").$this->getAES_DEC($key);
+								}
+								if (is_array($value["expiration"])) 
+								{	// Sub Query 구현.
+									$sub = $value["expiration"];
+									if ($sub["type"] == "SubQuery") {
+										$q = $q."\n ,(SELECT ".$sub["column"]." FROM ".$sub["table"]." WHERE ".$sub["condition"]." LIMIT 1) AS ".$sub["alias"];
+									}
+								}
+							break;
+						case "text" : 
+							break;
+						case "date" : 
+							if (is_string($value["expiration"])) {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '".$value["expiration"]."') AS ".$key;
+							}
+							else {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '%Y-%m-%d') AS ".$key;
+							}
+							break;
+							
+						case "time" : 
+							if (is_string($value["expiration"])) {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '".$value["expiration"]."') AS ".$key;
+							}
+							else {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '%H:%i:%s') AS ".$key;
+							}
+							break;
+						case "timestamp" : 
+							if (is_string($value["expiration"])) {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '".$value["expiration"]."') AS ".$key;
+							}
+							else {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '%Y-%m-%d %H:%i') AS ".$key;
+							}
+							break;
+						case "datetime" : 
+							if (is_string($value["expiration"])) {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '".$value["expiration"]."') AS ".$key;
+							}
+							else {
+								$q = ($count == 0 ? "\n  " : "\n ,")."DATE_FORMAT(A.".$key.", '%Y-%m-%d %H:%i:%s') AS ".$key;
+							}
+							break;							
+					}			
+				}
+
+				$fildsQuery	= $fildsQuery.$q;
+				$count++;
+			}
+			
+			if (empty($condition)) {
+				$this->query = "SELECT ".$fildsQuery." \nFROM ".$this->table." A";
+			}
+			else {
+				$this->query = "SELECT ".$fildsQuery." \nFROM ".$this->table." A\n".$this->getCondition($condition);
+			}
+			if (!empty($sort)) {
+				$count = 0;
+				$order = "";
+				while (list($fild, $order) = each($sort)) 
+				{
+					$order = ($count == 0 ? "" : " ,")."A.".$key." ".$order;
+				}
+				$this->query."\nORDER BY ".$order;
+			}
+			if ($page_size > 0) {
+				if ($page_size == 1 && $page_count == 1) {
+					$this->query."\nLIMIT 1";
+				} 
+				else {
+					$this->query."\nLIMIT ".(($page_count-1) * $page_size).", ".(($page_count-1) * $page_size + $page_size);
+				}				
+			}
+		} 
 	}
 
 	/**
@@ -250,6 +380,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 */
 	private function InsertQueryGenerator($param = null) {
 		$this->logging("InsertQueryGenerator()");
+		echo(print_r($param));
 		if (is_array($this->entity)) {
 			$fildsQuery = "";
 			$dataQuery = "";
@@ -274,21 +405,33 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 * @param array $condition
 	 */
 	private function UpdateQueryGenerator($param = null, $condition = null) {		
-		$this->logging("UpdateQueryGenerator()");
+		$this->logging("UpdateQueryGenerator()");		
 		if (is_array($this->entity)) {
-			$query = "";
-			$count = 0;
+			$q = "";
+			$c = 0;
+			/*
 			while (list($key, $value) = each($this->entity)) {
+				print ("<br/>debug:".$this->entity_key."/".$key."/".$value);
 				if ($key != $this->entity_key) {
-					if (!empty($param[$key])) 
-					{	// 
-						$query  = $query.($count == 0 ? "\n  " : "\n ,").$this->getUpdateValue($key, $value, $param[$key]);
-						$count++;
+					if (!empty($param[$key])) {
+						$q  = $q.($c == 0 ? "\n  " : "\n ,").$this->getUpdateValue($key, $value, $param[$key]);
+						$c++;
 					}
 				}
 			}
+			*/
+			while (list($pKey, $pValue) = each($param)) {
+				print ("<br/>debug:".$this->entity_key."/".$pKey."/".$pValue."<br>");
+				if ($pKey != $this->entity_key && !empty($pValue)) {
+					$fild_type = $this->entity[$pKey];					
+					if (!empty($fild_type)) {
+						$q  = $q.($c == 0 ? "\n  " : "\n ,").$this->getUpdateValue($pKey, $fild_type, $pValue);
+						$c++;
+					}					
+				}
+			}
 
-			$this->query = "UPDATE ".$this->table." SET ".$query."\n".$this->getCondition($condition);
+			$this->query = "UPDATE ".$this->table." SET ".$q."\n".$this->getCondition($condition);			
 		} 
 	}
 
@@ -298,7 +441,7 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	 */
 	private function DeleteQueryGenerator($condition = null) {
 		$this->logging("DeleteQueryGenerator()");
-		$this->query = "DELETE ".$this->table.$this->getCondition($condition);
+		$this->query = "DELETE ".$this->table." ".$this->getCondition($condition);
 	}
 	
 	/**
@@ -421,7 +564,12 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 		$q = "";
 		if (is_array($condition)) {			
 			while (list($key, $value) = each($condition)) {
-				$q = $q.(($c == 0) ? "WHERE" : "AND")." $key = '$value' ";
+				if (strtoupper($value) == "NULL") {
+					$q = $q.(($c == 0) ? "WHERE" : "AND")." isNull($key) ";
+				}
+				else {
+					$q = $q.(($c == 0) ? "WHERE" : "AND")." $key = '$value' ";
+				}				
 				$c++;
 			}
 		}
@@ -432,18 +580,28 @@ class DataAccessComponentBase implements DataAccessComponentInterface {
 	}
 	
 	
-	
+	/**
+	 * MySql 데이터 암호화 쿼리
+	 * @param string $value
+	 * @return string
+	 */
 	private function getAES_ENC($value = "") {
 		if (empty($value)) {
 			die('Not found arguments.');
 		}		
-		return "HEX(AES_ENCRYPT('".$value."', '".$site_datasource["aes_key"]."')) ";
+		return "HEX(AES_ENCRYPT('".$value."', '".$this->conf["aes_key"]."')) ";
 	}
+	
+	/**
+	 * MySql 데이터 복호화 쿼리
+	 * @param string $name
+	 * @return string
+	 */
 	private function getAES_DEC($name = "") {
 		if (empty($name)) {
 			die('Not found arguments.');
 		}	
-		return "AES_DECRYPT(UNHEX(".$name."), '".$site_datasource["aes_key"]."') AS ".$name;
+		return "AES_DECRYPT(UNHEX(A.".$name."), '".$this->conf["aes_key"]."') AS ".$name;
 	}
 }
 ?>
